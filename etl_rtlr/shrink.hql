@@ -1,0 +1,36 @@
+use wh_postx_saveon_p1;
+
+SELECT distinct TX_DATE as transaction_date,
+FROM_UNIXTIME(UNIX_TIMESTAMP(START_TIME ,'yyyy.MM.dd HH:mm:ss'), 'HH:mm:ss') as transaction_time,
+LOG_HEADER_ID as trans_number,
+SCAN_CODE as retailer_upc,
+SCAN_CODE as product_key,
+0 as item_gross_amount,
+0 as item_net_amount,
+NVL(PRICE,0) as item_list_price,
+NVL(PRICE,0) as item_net_price,
+0 as item_quantity,
+0 as item_volume,
+0 as total_discount,
+LOCATION_ID as venue_id,
+LINE_NUMBER as line_id,
+-1 as customer_id,
+0 as poscode,
+0 as item,
+0 as total_sales_dollars,
+0 as total_sales_units,
+0 as points_awarded,
+0 as points_redeemed,
+0 as scan_weight,
+0 as retail_metric,
+0 as landed_branch_cost,
+0 as own_brand_ind,
+0 as brand,
+case when  QUANTITY  LIKE '%.%' THEN 0 ELSE QUANTITY END as shrink_units,
+case when  QUANTITY  LIKE '%.%' THEN QUANTITY ELSE 0 END as shrink_weight,
+LANDED_BRANCH_COST as shink_cost,
+EXTENDED_COST as shrink_extended_cost,
+REASON_CODE
+FROM shrink_src_stg 
+--where tx_date>='2018.11.02'
+where tx_date=from_unixtime(unix_timestamp()-1*60*60*24, 'yyyy.MM.dd');
